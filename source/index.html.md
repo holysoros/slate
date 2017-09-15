@@ -11,7 +11,7 @@ includes:
   - errors
 ---
 
-# 介绍
+# Introduction
 This project is just for Liulishuo interview, I'm drinking Kirin beer when I create the code repository that's why it is named as Kirin(麒麟).
 
 # Authentication
@@ -56,7 +56,7 @@ Kirin expects for the JWT key to be included in all API requests to the server i
 You must replace <code>JWT</code> with your personal JWT key.
 </aside>
 
-# Red Packet
+# Red Packet(口令红包)
 
 ## Create a red packet
 
@@ -173,7 +173,7 @@ curl -H "Accept: application/json" \
      http://kirin.julewu.com/red_packets/8
 ```
 
-# LuckyDraw
+# LuckyDraw(红包抽奖)
 
 ## Get all lucky draws you got
 Open a red packet to get a lucky draw.
