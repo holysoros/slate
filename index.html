@@ -215,7 +215,7 @@
         </div>
       <div id="toc" class="toc-list-h1">
           <li>
-            <a href="#" class="toc-h1 toc-link" data-title="介绍">介绍</a>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
@@ -226,33 +226,33 @@
               </ul>
           </li>
           <li>
-            <a href="#red-packet" class="toc-h1 toc-link" data-title="Red Packet">Red Packet</a>
+            <a href="#red-packet" class="toc-h1 toc-link" data-title="Red Packet(口令红包)">Red Packet(口令红包)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#create-a-red-packet" class="toc-h2 toc-link" data-title="Red Packet">Create a red packet</a>
+                    <a href="#create-a-red-packet" class="toc-h2 toc-link" data-title="Red Packet(口令红包)">Create a red packet</a>
                   </li>
                   <li>
-                    <a href="#open-the-red-packet-with-code" class="toc-h2 toc-link" data-title="Red Packet">Open the red packet with code</a>
+                    <a href="#open-the-red-packet-with-code" class="toc-h2 toc-link" data-title="Red Packet(口令红包)">Open the red packet with code</a>
                   </li>
                   <li>
-                    <a href="#get-all-red-packet-you-sent" class="toc-h2 toc-link" data-title="Red Packet">Get all red packet you sent</a>
+                    <a href="#get-all-red-packet-you-sent" class="toc-h2 toc-link" data-title="Red Packet(口令红包)">Get all red packet you sent</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-red-packet-you-sent" class="toc-h2 toc-link" data-title="Red Packet">Get a specific red packet you sent</a>
+                    <a href="#get-a-specific-red-packet-you-sent" class="toc-h2 toc-link" data-title="Red Packet(口令红包)">Get a specific red packet you sent</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#luckydraw" class="toc-h1 toc-link" data-title="LuckyDraw">LuckyDraw</a>
+            <a href="#luckydraw" class="toc-h1 toc-link" data-title="LuckyDraw(红包抽奖)">LuckyDraw(红包抽奖)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-lucky-draws-you-got" class="toc-h2 toc-link" data-title="LuckyDraw">Get all lucky draws you got</a>
+                    <a href="#get-all-lucky-draws-you-got" class="toc-h2 toc-link" data-title="LuckyDraw(红包抽奖)">Get all lucky draws you got</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-lucky-draw-you-got" class="toc-h2 toc-link" data-title="LuckyDraw">Get a specific lucky draw you got</a>
+                    <a href="#get-a-specific-lucky-draw-you-got" class="toc-h2 toc-link" data-title="LuckyDraw(红包抽奖)">Get a specific lucky draw you got</a>
                   </li>
                   <li>
-                    <a href="#get-wallet-detail" class="toc-h2 toc-link" data-title="LuckyDraw">Get wallet detail</a>
+                    <a href="#get-wallet-detail" class="toc-h2 toc-link" data-title="LuckyDraw(红包抽奖)">Get wallet detail</a>
                   </li>
               </ul>
           </li>
@@ -267,7 +267,7 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id=''>介绍</h1>
+        <h1 id='introduction'>Introduction</h1>
 <p>This project is just for Liulishuo interview, I&#39;m drinking Kirin beer when I create the code repository that&#39;s why it is named as Kirin(麒麟).</p>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
@@ -307,7 +307,7 @@ curl -H <span class="s2">"Authorization: Bearer &lt;JWT&gt;"</span> <span class=
 <aside class="notice">
 You must replace <code>JWT</code> with your personal JWT key.
 </aside>
-<h1 id='red-packet'>Red Packet</h1><h2 id='create-a-red-packet'>Create a red packet</h2><pre class="highlight shell tab-shell"><code>curl -XPOST -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<h1 id='red-packet'>Red Packet(口令红包)</h1><h2 id='create-a-red-packet'>Create a red packet</h2><pre class="highlight shell tab-shell"><code>curl -XPOST -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
      -H <span class="s2">"Authorization: Bearer &lt;JWT&gt;"</span> <span class="se">\</span>
      -d <span class="s1">'{ "amount": 10, "packet_number": 3, "greeting": "Best wishes" }'</span> <span class="se">\</span>
      http://kirin.julewu.com/red_packets
@@ -399,7 +399,7 @@ You must replace <code>JWT</code> with your personal JWT key.
 <h2 id='get-a-specific-red-packet-you-sent'>Get a specific red packet you sent</h2><pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
      -H <span class="s2">"Authorization: Bearer &lt;JWT&gt;"</span>
      http://kirin.julewu.com/red_packets/8
-</code></pre><h1 id='luckydraw'>LuckyDraw</h1><h2 id='get-all-lucky-draws-you-got'>Get all lucky draws you got</h2>
+</code></pre><h1 id='luckydraw'>LuckyDraw(红包抽奖)</h1><h2 id='get-all-lucky-draws-you-got'>Get all lucky draws you got</h2>
 <p>Open a red packet to get a lucky draw.</p>
 <pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
      -H <span class="s2">"Authorization: Bearer &lt;JWT&gt;"</span> <span class="se">\</span>
