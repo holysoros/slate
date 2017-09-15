@@ -1,98 +1,144 @@
 ---
-title: API Reference
+title: Kirin API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - ruby
-  - python
-  - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
   - errors
-
-search: true
 ---
 
-# Introduction
-
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
-
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+# 介绍
+This project is just for Liulishuo interview, I'm drinking Kirin beer when I create the code repository that's why it is named as Kirin(麒麟).
 
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+```shell
+# With shell, you can just pass the correct JWT in Authorization header with each request
+curl -H "Authorization: Bearer <JWT>" \
+     "api_endpoint_here"
 ```
 
-```python
-import kittn
+Authenticate failed:
 
-api = kittn.authorize('meowmeowmeow')
-```
+- 401, no JWT provided or invalid JWT;
+- 403, valid JWT but have no privilege to access the resource;
+
+> Make sure to replace `<JWT>` with your correct JWT.
+
+## Get the JWT
+Get your JWT by post `user_token` endpoint with email and password.
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl -XPOST -H "Content-Type: application/json" \
+     -d '{ "auth": { "email": "holysoros@gmail.com", "password": "password" } }' \
+     http://kirin.julewu.com/user_token
 ```
 
-```javascript
-const kittn = require('kittn');
+> JSON response
 
-let api = kittn.authorize('meowmeowmeow');
+```json
+{
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDU1Njg5NjgsInN1YiI6MX0.2Os_C9zyVgo87u9zqUwcFvim8nm0H3ne56P8gJuajmk"
+}
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+Kirin expects for the JWT key to be included in all API requests to the server in a header that looks like the following:
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: Bearer <JWT>`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>JWT</code> with your personal JWT key.
 </aside>
 
-# Kittens
+# Red Packet
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Create a red packet
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl -XPOST -H "Content-Type: application/json" \
+     -H "Authorization: Bearer <JWT>" \
+     -d '{ "amount": 10, "packet_number": 3, "greeting": "Best wishes" }' \
+     http://kirin.julewu.com/red_packets
 ```
 
-```javascript
-const kittn = require('kittn');
+> The above command returns JSON structured like this:
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+```json
+{
+  "id": 13,
+  "number": "201709151432031646553377299",
+  "amount": "101.0",
+  "packet_number": 3,
+  "greeting": null,
+  "code": "Ek1uQJ7T",
+  "created_at": "2017-09-15T14:32:03.166Z",
+  "lucky_draws": [],
+  "sender": {
+    "id": 1,
+    "name": "BinLi",
+    "email": "holysoros@gmail.com"
+  }
+}
+```
+
+## Open the red packet with code
+Open the red packet is just to create a lucky draw for a red packet.
+
+Return 201 if success to open the red packet, and return 400 if failed. A message with given to specify why the request failed:
+
+- Incorrect code
+- The red packet is expired or finished
+- You have opened the red packet
+
+```shell
+curl -XPOST -H "Content-Type: application/json" \
+     -H "Authorization: Bearer <JWT>" \
+     -d '{ "code": "DVfiI86B" }' \
+     http://kirin.julewu.com/red_packets/8/lucky_draws
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "id": 2,
+    "amount": "1.15",
+    "created_at": "2017-09-15T14:33:15.425Z",
+    "red_packet": {
+      "id": 13,
+      "number": "201709151432031646553377299",
+      "amount": "101.0",
+      "packet_number": 3,
+      "greeting": null,
+      "code": "Ek1uQJ7T",
+      "created_at": "2017-09-15T14:32:03.166Z"
+    },
+    "user": {
+      "id": 1,
+      "name": "BinLi",
+      "email": "holysoros@gmail.com"
+    }
+}
+```
+
+Return 400 status code if some error happened.
+
+```json
+{"message":"Incorrect code"}
+```
+
+## Get all red packet you sent
+
+```shell
+curl -H "Accept: application/json" \
+     -H "Authorization: Bearer <JWT>" \
+     http://kirin.julewu.com/red_packets
 ```
 
 > The above command returns JSON structured like this:
@@ -100,140 +146,133 @@ let kittens = api.kittens.get();
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "id": 4,
+      "number": "201709150925412540568238214",
+      "amount": "199.0",
+      "packet_number": 4,
+      "greeting": "Hello world",
+      "code": "Ny288dyH",
+      "created_at": "2017-09-15T09:25:41.256Z",
+      "lucky_draws": [],
+      "sender": {
+        "id": 1,
+        "name": "BinLi",
+        "email": "holysoros@gmail.com"
+      }
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all red packets you sent.
 
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get a specific red packet you sent
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl -H "Accept: application/json" \
+     -H "Authorization: Bearer <JWT>"
+     http://kirin.julewu.com/red_packets/8
 ```
 
-```javascript
-const kittn = require('kittn');
+# LuckyDraw
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+## Get all lucky draws you got
+Open a red packet to get a lucky draw.
+
+```shell
+curl -H "Accept: application/json" \
+     -H "Authorization: Bearer <JWT>" \
+     http://kirin.julewu.com/lucky_draws
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "id":1,
+    "amount":"1.15",
+    "created_at":"2017-09-15T14:00:50.767Z",
+    "red_packet": {
+      "id":8,
+      "number":"201709151400357642349271522",
+      "amount":"10.0",
+      "packet_number":3,
+      "greeting":"Best wishes",
+      "code":"DVfiI86B",
+      "created_at":"2017-09-15T14:00:35.765Z"
+    }
+  }
+]
+```
+
+## Get a specific lucky draw you got
+
+```shell
+curl -H "Accept: application/json" \
+     -H "Authorization: Bearer <JWT>"
+     http://kirin.julewu.com/lucky_draws/1
+```
+
+This endpoint retrieves a specific lucky draw.
+
+
+## Get wallet detail
+Get my balance and red packets list etc.
+
+```shell
+curl -H "Accept: application/json" \
+     -H "Authorization: Bearer <JWT>" \
+     http://kirin.julewu.com/wallet
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "balance": "101.1",
+    "lucky_draws": [
+        {
+            "id": 1,
+            "amount": "1.15",
+            "created_at": "2017-09-15T14:00:50.767Z",
+            "red_packet": {
+                "id": 8,
+                "number": "201709151400357642349271522",
+                "amount": "10.0",
+                "packet_number": 3,
+                "greeting": "Best wishes",
+                "code": "DVfiI86B",
+                "created_at": "2017-09-15T14:00:35.765Z"
+            }
+        }
+    ],
+    "red_packets": [
+        {
+            "id": 7,
+            "number": "201709151352040424570439248",
+            "amount": "10.0",
+            "packet_number": 3,
+            "greeting": "Best wishes",
+            "code": "7GvuD6gR",
+            "created_at": "2017-09-15T13:52:04.044Z",
+            "lucky_draws": []
+        },
+        {
+            "id": 8,
+            "number": "201709151400357642349271522",
+            "amount": "10.0",
+            "packet_number": 3,
+            "greeting": "Best wishes",
+            "code": "DVfiI86B",
+            "created_at": "2017-09-15T14:00:35.765Z",
+            "lucky_draws": [
+                {
+                    "id": 1,
+                    "amount": "1.15",
+                    "created_at": "2017-09-15T14:00:50.767Z"
+                }
+            ]
+        }
+    ]
 }
 ```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
-
